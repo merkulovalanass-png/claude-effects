@@ -1,0 +1,8 @@
+{
+  "name": "claude-effects",
+  "description": "7 эффектов для рилсов в Claude Code",
+  "owner": {"name": "sveta.v.reels"},
+  "plugins": [
+    {"name": "effects", "source": "./plugins/effects", "description": "/эффекты: стекло, орбита, прожектор, чеклист, таймлайн, склейка, тумблеры"}
+  ]
+}

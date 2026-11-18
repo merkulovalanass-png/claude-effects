@@ -1,0 +1,13 @@
+{
+ "video": "clip.mp4",
+ "duration": 8.7,
+ "count": "7",
+ "viewsLabel": "просмотры",
+ "sign": "Смонтировал Claude",
+ "cues": {
+  "start": 0.3,
+  "views": 3.0,
+  "ring": 4.4,
+  "sign": 6.2
+ }
+}

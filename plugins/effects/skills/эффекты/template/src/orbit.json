@@ -1,0 +1,14 @@
+{
+ "video": "clip.mp4",
+ "fg": "fg.webm",
+ "duration": 8.7,
+ "start": 0.2,
+ "period": 6.5,
+ "cx": 540,
+ "cy": 800,
+ "rx": 400,
+ "ry": 400,
+ "tilt": 0,
+ "cardW": 150,
+ "covers": []
+}

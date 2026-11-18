@@ -1,0 +1,11 @@
+{
+ "video": "clip.mp4",
+ "fg": "fg.webm",
+ "duration": 8.7,
+ "start": 0.3,
+ "neon": 1.1,
+ "word": "CLAUDE",
+ "color": "#FF2BD6",
+ "size": 112,
+ "textY": 350
+}
