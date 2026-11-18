@@ -1,0 +1,252 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>/эффекты · Светочка</title>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<style>
+/* ====== НАСТРОЙКИ: впиши сюда свой урок ====== */
+:root{--bg:#0B0B0D;--card:#141417;--line:#26262B;--text:#F3F1EC;--mute:#8E8B85;--yellow:#FFD60A;--orange:#FF9F0A;--green:#34C759}
+@font-face{font-family:UB;src:url(fonts/UnboundedBlack.ttf)}
+@font-face{font-family:UL;src:url(fonts/UnboundedLight.ttf)}
+@font-face{font-family:MK;src:url(fonts/Marck.ttf)}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;background:var(--bg);color:var(--text);font:16px/1.45 -apple-system,"SF Pro Text",Helvetica,Arial,sans-serif}
+body{padding:18px 16px calc(28px + env(safe-area-inset-bottom))}
+.wrap{max-width:560px;margin:0 auto}
+.head{display:flex;align-items:center;gap:12px;margin:4px 0 18px}
+.ava{width:52px;height:52px;border-radius:16px;object-fit:cover;object-position:50% 22%;border:1px solid var(--line)}
+.who{font:12px/1.5 UL,sans-serif;letter-spacing:.18em;color:var(--mute);text-transform:uppercase}
+h1{font:34px/1.05 UB,sans-serif;color:var(--yellow);margin:0 0 6px;letter-spacing:.5px}
+h1 .mk{font:38px MK,cursive;color:var(--text);letter-spacing:0;font-weight:400}
+.lead{color:#C9C5BD;margin:0 0 20px;font-size:17px}
+.bar{display:flex;gap:6px;margin:0 0 8px}
+.bar i{flex:1;height:6px;border-radius:3px;background:#2C2C31}
+.bar i.on{background:linear-gradient(90deg,var(--yellow),var(--orange));box-shadow:0 0 12px rgba(255,180,0,.35)}
+.step{font:13px/1.4 ui-monospace,Menlo,monospace;color:var(--mute);margin-bottom:18px}
+.step b{color:var(--yellow);font-weight:400}
+.note{border-left:3px solid var(--yellow);padding:4px 0 4px 14px;color:#B9B5AD;margin:0 0 18px;font-size:15px}
+.card{display:flex;align-items:center;gap:16px;background:var(--card);border:1px solid var(--line);border-radius:24px;padding:18px;margin:0 0 12px;cursor:pointer;transition:transform .15s}
+.card:active{transform:scale(.98)}
+.chk{flex:none;width:52px;height:52px;border-radius:15px;border:1.5px solid #3A3A40;display:grid;place-items:center;font:20px UB}
+.card.done .chk{background:linear-gradient(135deg,var(--yellow),var(--orange));border:0;color:#111}
+.card .lbl{font:12px/1.4 UL,sans-serif;letter-spacing:.16em;color:var(--yellow);text-transform:uppercase}
+.card .ttl{font:600 19px/1.25 -apple-system,Helvetica,sans-serif;margin-top:3px}
+.card .arr{margin-left:auto;color:var(--mute);font-size:22px}
+.card.lesson{border-color:rgba(255,214,10,.45);background:linear-gradient(160deg,#1C1A10,#141417)}
+.view{display:none}
+.view.on{display:block;animation:in .35s ease}
+@keyframes in{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+h2{font:26px/1.1 UB,sans-serif;margin:6px 0 6px}
+h2 .y{color:var(--yellow)}
+.sub{color:#B9B5AD;margin:0 0 16px}
+video{display:block;width:100%;border-radius:20px;background:#000}
+.reel{max-width:330px;margin:0 auto 22px;aspect-ratio:9/16}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.fx{background:var(--card);border:1px solid var(--line);border-radius:18px;overflow:hidden}
+.fx video{border-radius:0;aspect-ratio:9/16}
+.fx .cap{padding:9px 11px 11px}
+.fx .cap b{display:block;font:15px UB,sans-serif;color:var(--yellow)}
+.fx .cap span{font-size:13px;color:#B9B5AD}
+.code{background:#1A1A1E;border:1px solid var(--line);border-radius:16px;padding:14px;font:14px/1.5 ui-monospace,Menlo,monospace;color:#E8E4DC;white-space:pre-wrap;word-break:break-word;margin:0 0 10px}
+.btn{display:block;width:100%;border:0;border-radius:16px;padding:16px;font:600 17px -apple-system,Helvetica,sans-serif;background:var(--yellow);color:#111;cursor:pointer;text-align:center;text-decoration:none;margin:0 0 12px}
+.btn.ghost{background:#1F1F24;color:var(--text);border:1px solid var(--line)}
+.btn:active{transform:scale(.98)}
+ol.how{padding:0;margin:0 0 18px;list-style:none;counter-reset:s}
+ol.how li{counter-increment:s;position:relative;padding:0 0 14px 46px;color:#D6D2CA}
+ol.how li:before{content:counter(s);position:absolute;left:0;top:-2px;width:32px;height:32px;border-radius:10px;background:#1F1F24;border:1px solid var(--line);display:grid;place-items:center;font:14px UB;color:var(--yellow)}
+.cmd{display:flex;align-items:center;justify-content:space-between;gap:10px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 14px;margin:0 0 8px;cursor:pointer}
+.cmd code{font:15px ui-monospace,Menlo,monospace;color:var(--yellow)}
+.cmd span{font-size:13px;color:var(--mute);text-align:right}
+.req{display:flex;gap:10px;align-items:flex-start;color:#D6D2CA;margin:0 0 10px}
+.req i{font-style:normal;color:var(--green)}
+.price{font:30px UB,sans-serif;color:var(--yellow);margin:4px 0 14px}
+.price s{font:18px UL;color:var(--mute);margin-left:8px}
+.toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom));transform:translateX(-50%) translateY(30px);opacity:0;background:#F3F1EC;color:#111;padding:10px 18px;border-radius:12px;font-weight:600;transition:.25s;pointer-events:none}
+.toast.on{opacity:1;transform:translateX(-50%)}
+.back{display:inline-block;color:var(--mute);margin:0 0 12px;cursor:pointer}
+.mk2{font:30px MK,cursive;color:var(--yellow)}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<!-- ====== ГЛАВНАЯ ====== -->
+<section class="view on" id="home">
+  <div class="head">
+    <img class="ava" src="media/reel.jpg" alt="">
+    <div class="who">Светочка<br>скилл для Claude</div>
+  </div>
+  <h1>/эффекты <span class="mk">для рилсов</span></h1>
+  <p class="lead">7 эффектов в Claude Code одной командой. Три коротких шага, а дальше урок по монтажу.</p>
+  <div class="bar" id="bar"><i></i><i></i><i></i><i></i></div>
+  <div class="step" id="stepTxt"></div>
+  <div class="note">Проходи по порядку: так за 5 минут у тебя будет рабочий скилл.</div>
+
+  <div class="card" data-go="v1"><div class="chk">1</div><div><div class="lbl">Шаг 1</div><div class="ttl">Посмотри, что получится</div></div><div class="arr">→</div></div>
+  <div class="card" data-go="v2"><div class="chk">2</div><div><div class="lbl">Шаг 2</div><div class="ttl">Установи скилл за 2 минуты</div></div><div class="arr">→</div></div>
+  <div class="card" data-go="v3"><div class="chk">3</div><div><div class="lbl">Шаг 3</div><div class="ttl">Как пользоваться: все 7 команд</div></div><div class="arr">→</div></div>
+  <div class="card lesson" data-go="v4"><div class="chk">★</div><div><div class="lbl">Урок</div><div class="ttl" id="lessonCardTitle">Клод, монтируй!</div></div><div class="arr">→</div></div>
+</section>
+
+<!-- ====== ШАГ 1 ====== -->
+<section class="view" id="v1">
+  <div class="back" data-back>← назад</div>
+  <h2>Посмотри, <span class="y">что получится</span></h2>
+  <p class="sub">Это мой рилс, все эффекты в нём сделаны командой <b>/эффекты</b>.</p>
+  <video class="reel" src="media/reel.mp4" poster="media/reel.jpg" controls playsinline preload="metadata"></video>
+  <div class="grid" id="grid"></div>
+  <p></p>
+  <button class="btn" data-next="v2">Дальше: установка →</button>
+</section>
+
+<!-- ====== ШАГ 2 ====== -->
+<section class="view" id="v2">
+  <div class="back" data-back>← назад</div>
+  <h2>Установи <span class="y">за 2 минуты</span></h2>
+  <p class="sub">Что нужно:</p>
+  <div class="req"><i>✓</i><div>Приложение Claude на компьютере, вкладка <b>Code</b> (подписка Pro или выше)</div></div>
+  <div class="req"><i>✓</i><div>Mac (на нём всё проверено)</div></div>
+  <p class="sub" style="margin-top:14px">Скопируй текст и вставь его в новый чат во вкладке Code. Claude всё установит сам:</p>
+  <div class="code" id="installTxt"></div>
+  <button class="btn" data-copy="installTxt">Скопировать</button>
+  <p class="sub">Первый запуск займёт пару минут: Claude один раз ставит всё нужное. Дальше каждый эффект готов за 1–2 минуты.</p>
+  <button class="btn ghost" data-next="v3">Дальше: как пользоваться →</button>
+</section>
+
+<!-- ====== ШАГ 3 ====== -->
+<section class="view" id="v3">
+  <div class="back" data-back>← назад</div>
+  <h2>Как <span class="y">пользоваться</span></h2>
+  <ol class="how">
+    <li>Открой новый чат во вкладке Code</li>
+    <li>Перетащи в поле ввода своё вертикальное видео</li>
+    <li>Напиши команду и нажми Enter. Через 1–2 минуты готовое видео появится в чате</li>
+  </ol>
+  <p class="sub">Нажми на команду, чтобы скопировать:</p>
+  <div id="cmds"></div>
+  <p class="sub" style="margin-top:12px">Тексты можно менять словами: <i>/эффекты прожектор, слово МАРИНА</i></p>
+  <button class="btn" data-next="v4">Хочу монтировать так же →</button>
+</section>
+
+<!-- ====== УРОК ====== -->
+<section class="view" id="v4">
+  <div class="back" data-back>← назад</div>
+  <div class="mk2">урок</div>
+  <h2 id="lessonTitle"></h2>
+  <p class="sub" id="lessonSub"></p>
+  <ol class="how" id="lessonList"></ol>
+  <div class="price" id="lessonPrice"></div>
+  <p class="sub" id="lessonNote"></p>
+  <a class="btn" id="lessonBtn" target="_blank" rel="noopener"></a>
+  <button class="btn ghost" data-back>Вернуться к шагам</button>
+</section>
+
+</div>
+<div class="toast" id="toast">Скопировано</div>
+
+<script>
+/* ===================== НАСТРОЙКИ ===================== */
+const LESSON = {
+  title: "Клод, монтируй!",
+  sub: "Мастер-класс: ты снимаешь, Claude монтирует. Отдаёшь видео, пишешь пару фраз обычными словами и получаешь готовый Reels с субтитрами, графикой и звуками.",
+  points: [
+    "Какой тариф Claude нужен и как оплатить из России",
+    "Установка всего одним сообщением: Claude сам ставит программы",
+    "Первый монтаж: какие файлы дать и что написать",
+    "Правки обычными словами и слепые зоны Instagram",
+    "Обучить Claude своему стилю, чтобы следующий ролик выходил почти без правок",
+  ],
+  price: "2 490 ₽",
+  oldPrice: "",
+  note: "Разовая оплата · доступ навсегда · гайд PDF, готовые запросы и скиллы для блога в подарок",
+  button: "Купить урок",
+  link: "https://svetavreels.taplink.ws",
+};
+const INSTALL = "Установи скилл «эффекты»: скачай репозиторий https://github.com/merkulovalanass-png/claude-effects и скопируй папку plugins/effects/skills/эффекты в ~/.claude/skills/эффекты";
+const FX = [
+  ["glass","стекло","стеклянные панели вокруг тебя"],
+  ["orbit","орбита","твои рилсы кружат вокруг головы"],
+  ["spotlight","прожектор","фон гаснет, неон за головой"],
+  ["checklist","чеклист","список отмечается по ходу речи"],
+  ["timeline","таймлайн","монтажная дорожка с бегущей линией"],
+  ["matchcut","склейка","нарезка страниц, слово на месте"],
+  ["toggles","тумблеры","переключатели как на айфоне"],
+];
+/* ===================================================== */
+
+const tg = window.Telegram && Telegram.WebApp;
+if (tg) { try { tg.ready(); tg.expand(); tg.setHeaderColor("#0B0B0D"); tg.setBackgroundColor("#0B0B0D"); } catch (e) {} }
+const haptic = (t) => { try { tg && tg.HapticFeedback.impactOccurred(t || "light"); } catch (e) {} };
+const store = {
+  get() { try { return JSON.parse(localStorage.getItem("fx_done") || "[]"); } catch (e) { return []; } },
+  add(v) { try { const s = new Set(store.get()); s.add(v); localStorage.setItem("fx_done", JSON.stringify([...s])); } catch (e) {} },
+};
+
+// fill content
+document.getElementById("installTxt").textContent = INSTALL;
+document.getElementById("grid").innerHTML = FX.map(([id, ru, d]) =>
+  `<div class="fx"><video src="media/${id}.mp4" poster="media/${id}.jpg" muted loop playsinline autoplay preload="metadata"></video>
+   <div class="cap"><b>${ru}</b><span>${d}</span></div></div>`).join("");
+document.getElementById("cmds").innerHTML = FX.map(([id, ru, d]) =>
+  `<div class="cmd" data-text="/эффекты ${ru}"><code>/эффекты ${ru}</code><span>${d}</span></div>`).join("");
+document.getElementById("lessonCardTitle").textContent = LESSON.title;
+document.getElementById("lessonTitle").textContent = LESSON.title;
+document.getElementById("lessonSub").textContent = LESSON.sub;
+document.getElementById("lessonList").innerHTML = LESSON.points.map((p) => `<li>${p}</li>`).join("");
+document.getElementById("lessonPrice").innerHTML = LESSON.price ? `${LESSON.price}${LESSON.oldPrice ? `<s>${LESSON.oldPrice}</s>` : ""}` : "";
+document.getElementById("lessonNote").textContent = LESSON.note || "";
+const lb = document.getElementById("lessonBtn"); lb.textContent = LESSON.button; lb.href = LESSON.link;
+
+// progress
+function paint() {
+  const done = store.get();
+  const steps = ["v1", "v2", "v3", "v4"];
+  document.querySelectorAll("#bar i").forEach((el, i) => el.classList.toggle("on", done.includes(steps[i])));
+  document.querySelectorAll(".card").forEach((c) => {
+    const v = c.dataset.go, ok = done.includes(v);
+    c.classList.toggle("done", ok);
+    if (ok) c.querySelector(".chk").textContent = "✓";
+    const l = c.querySelector(".lbl"); if (ok && !l.textContent.includes("·")) l.textContent += " · пройден";
+  });
+  const n = Math.min(4, done.filter((v) => steps.includes(v)).length + 1);
+  document.getElementById("stepTxt").innerHTML = n > 3 ? `Шаг 4 из 4 <b>урок по монтажу</b>` : `Шаг ${n} из 4 <b>дальше урок по монтажу</b>`;
+}
+
+// navigation
+let cur = "home";
+function go(id) {
+  document.querySelectorAll(".view").forEach((v) => v.classList.toggle("on", v.id === id));
+  cur = id; window.scrollTo(0, 0);
+  if (id !== "home") { store.add(id); try { tg && tg.BackButton.show(); } catch (e) {} }
+  else { try { tg && tg.BackButton.hide(); } catch (e) {} }
+  document.querySelectorAll(".view:not(.on) video").forEach((v) => v.pause());
+  paint();
+}
+document.addEventListener("click", (e) => {
+  const t = e.target.closest("[data-go],[data-next],[data-back],[data-copy],.cmd");
+  if (!t) return;
+  haptic();
+  if (t.dataset.go) go(t.dataset.go);
+  else if (t.dataset.next) go(t.dataset.next);
+  else if ("back" in t.dataset) go("home");
+  else if (t.dataset.copy) copy(document.getElementById(t.dataset.copy).textContent);
+  else if (t.classList.contains("cmd")) copy(t.dataset.text);
+});
+lb.addEventListener("click", (e) => { if (tg && tg.openLink) { e.preventDefault(); haptic("medium"); tg.openLink(LESSON.link); } });
+try { tg && tg.BackButton.onClick(() => go("home")); } catch (e) {}
+
+function copy(text) {
+  const ok = () => { const el = document.getElementById("toast"); el.classList.add("on"); setTimeout(() => el.classList.remove("on"), 1400); try { tg && tg.HapticFeedback.notificationOccurred("success"); } catch (e) {} };
+  if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).then(ok, () => fallback(text, ok));
+  else fallback(text, ok);
+}
+function fallback(text, ok) {
+  const ta = document.createElement("textarea"); ta.value = text; ta.style.position = "fixed"; ta.style.opacity = "0";
+  document.body.appendChild(ta); ta.select(); try { document.execCommand("copy"); ok(); } catch (e) {} ta.remove();
+}
+paint();
+</script>
+</body>
+</html>
